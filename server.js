@@ -57,8 +57,8 @@ app.get("/scrape", function(req, res) {
         .text();
 
       result.link = $(this)
-        .find("a")
         .append("https://www.nytimes.com/")
+        .find("a")
         .attr("href");
 
       console.log(result);
@@ -67,6 +67,7 @@ app.get("/scrape", function(req, res) {
       db.Article.create(result)
         .then(function(dbArticle) {
           // View the added result in the console
+          // res.json(dbArticle);
           console.log(dbArticle);
         })
         .catch(function(err) {
@@ -76,7 +77,6 @@ app.get("/scrape", function(req, res) {
     });
 
     // Send a message to the client
-    res.json(dbArticle);
     res.send("Scrape Complete");
   });
 });
@@ -111,11 +111,6 @@ app.get("/articles/:id", function(req, res) {
     });
 });
 
-// Start the server
-app.listen(PORT, function() {
-  console.log("App running on port " + PORT + "!");
-});
-
 // Route for saving/updating an Article's associated Note
 app.post("/articles/:id", function(req, res) {
   // Create a new note and pass the req.body to the entry
@@ -134,4 +129,9 @@ app.post("/articles/:id", function(req, res) {
       // If an error occurred, send it to the client
       res.json(err);
     });
+});
+
+// Start the server
+app.listen(PORT, function() {
+  console.log("App running on port " + PORT + "!");
 });
